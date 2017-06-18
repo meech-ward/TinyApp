@@ -1,31 +1,37 @@
 /* eslint no-console:0 */
 const express = require('express');
+const database = require('../database');
 
 const router = express.Router();
 
 
-const urlDatabase = {
-  b2xVn2: 'http://www.lighthouselabs.ca',
-  '9sm5xK': 'http://www.google.com',
-};
 function randomString() {
-  return `short${Object.keys(urlDatabase).length}`;
+  return database.allURLs().then(urls => `short${Object.keys(urls).length}`);
 }
 
-const urlDatabaseViewModel = [];
-for (const key in urlDatabase) {
-  const output = `${key}: ${urlDatabase[key]}`;
-  urlDatabaseViewModel.push(output);
+function urlDatabaseViewModel() {
+  const viewModel = [];
+  return database.allURLs().then((urls) => {
+    for (const key in urls) {
+      const output = `${key}: ${urls[key]}`;
+      viewModel.push(output);
+    }
+    return viewModel;
+  });
 }
 
 
 router.get('/', (req, res) => {
-  const templateVars = { urls: urlDatabaseViewModel };
-  res.render('urls_index', templateVars);
+  urlDatabaseViewModel().then((urls) => {
+    const templateVars = { urls };
+    res.render('urls_index', templateVars);
+  });
 });
 
 router.get('/json', (req, res) => {
-  res.json(urlDatabase);
+  database.allURLs().then((urls) => {
+    res.json(urls);
+  });
 });
 
 router.get('/new', (req, res) => {
@@ -33,26 +39,28 @@ router.get('/new', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-  const longURL = req.body;  // debug statement to see POST parameters
-  const shortURL = randomString();
-  urlDatabase[shortURL] = longURL;
-
-  // Redirect to /urls
-  res.statusCode = 302;
-  res.setHeader('Location', '/urls');
-  res.end();
+  const longURL = req.body.longURL;
+  randomString()
+  .then(shortURL => database.addURL(longURL, shortURL))
+  .then(() => {
+    // Redirect to /urls
+    res.statusCode = 302;
+    res.setHeader('Location', '/urls');
+    res.end();
+  });
 });
 
 router.get('/:id', (req, res) => {
   const urlID = req.params.id;
 
-  if (!urlDatabase[urlID]) {
-    res.sendStatus(404);
-    return;
-  }
+  database.allURLs().then((urls) => {
+    if (!urls[urlID]) {
+      return Promise.reject();
+    }
 
-  const templateVars = { url: { short: urlID, long: urlDatabase[urlID] } };
-  res.render('urls_show', templateVars);
+    const templateVars = { url: { short: urlID, long: urls[urlID] } };
+    res.render('urls_show', templateVars);
+  }).catch(() => res.sendStatus(404));
 });
 
 module.exports = router;
