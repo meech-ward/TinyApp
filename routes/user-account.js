@@ -19,4 +19,8 @@ router.post('/logout', (req, res) => {
   redirect.redirectToURLs(res);
 });
 
+router.get('/register', (req, res) => {
+  res.render('user_register');
+});
+
 module.exports = router;
