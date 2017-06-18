@@ -12,7 +12,12 @@
     <%= JSON.stringify(urls) %>
     <% for (var key in urls) { %>
       <% const deleteAction = `/urls/${key}/delete` %>
-      <li><%= `${key}: ${urls[key]}` %><form method="POST" action="<%= deleteAction %>"><input type="submit" value="Delete"></form></li>
+      <% const editAction = `/urls/${key}` %>
+      <li>
+        <%= `${key}: ${urls[key]}` %>
+        <form method="POST" action="<%= deleteAction %>"><input type="submit" value="Delete"></form>
+        <a href="<%= editAction %>">Edit</a>
+        </li>
     <% } %>
   </ul>
 </body>
