@@ -1,6 +1,7 @@
 /* eslint no-console:0 */
 const express = require('express');
 const database = require('../database');
+const redirect = require('../redirect');
 
 const router = express.Router();
 
@@ -8,13 +9,6 @@ const router = express.Router();
 function randomString() {
   return database.allURLs().then(urls => `short${Object.keys(urls).length}`);
 }
-
-function redirectToURLs(res) {
-  res.statusCode = 302;
-  res.setHeader('Location', '/urls');
-  res.end();
-}
-
 
 router.get('/', (req, res) => {
   database.allURLs().then((urls) => {
@@ -39,7 +33,7 @@ router.post('/', (req, res) => {
   .then(shortURL => database.addURL(longURL, shortURL))
   .then(() => {
     // Redirect to /urls
-    redirectToURLs(res);
+    redirect.redirectToURLs(res);
   });
 });
 
@@ -76,7 +70,7 @@ router.post('/:id/delete', (req, res) => {
 
   database.deleteURL(urlID).then(() => {
     // Deleted
-    redirectToURLs(res);
+    redirect.redirectToURLs(res);
   }).catch(() => res.sendStatus(404));
 });
 
