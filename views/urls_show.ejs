@@ -9,10 +9,14 @@
 <body>
   <% include partials/_header %>
   <ul>
-    <%= JSON.stringify(urls) %>
-    <% urls.forEach((url, index) => { %>
-      <li><%= url %></li>
-    <% }) %>
+    <li>
+    Long URL: 
+    <%= url.long %>
+    </li>
+    <li>
+    Short URL: 
+    <%= url.short %>
+    </li>
   </ul>
 </body>
 </html>
