@@ -10,9 +10,14 @@ function randomString() {
   return database.allURLs().then(urls => `short${Object.keys(urls).length}`);
 }
 
+function defaultTemplateVars(req) {
+  return { username: req.cookies.username };
+}
+
 router.get('/', (req, res) => {
   database.allURLs().then((urls) => {
-    const templateVars = { urls };
+    const templateVars = defaultTemplateVars(req);
+    templateVars.urls = urls;
     res.render('urls_index', templateVars);
   });
 });
@@ -24,7 +29,7 @@ router.get('/json', (req, res) => {
 });
 
 router.get('/new', (req, res) => {
-  res.render('urls_new');
+  res.render('urls_new', defaultTemplateVars(req));
 });
 
 router.post('/', (req, res) => {
@@ -45,7 +50,8 @@ router.get('/:id', (req, res) => {
       return Promise.reject();
     }
 
-    const templateVars = { url: { short: urlID, long: urls[urlID] } };
+    const templateVars = defaultTemplateVars(req);
+    templateVars.url = { short: urlID, long: urls[urlID] };
     res.render('urls_show', templateVars);
   }).catch(() => res.sendStatus(404));
 });
@@ -60,7 +66,8 @@ router.post('/:id', (req, res) => {
       return Promise.reject();
     }
 
-    const templateVars = { url: { short: urlID, long: urls[urlID] } };
+    const templateVars = defaultTemplateVars(req);
+    templateVars.url = { short: urlID, long: urls[urlID] };
     res.render('urls_show', templateVars);
   }).catch(() => res.sendStatus(404));
 });
