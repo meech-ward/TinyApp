@@ -56,6 +56,21 @@ router.get('/:id', (req, res) => {
   }).catch(() => res.sendStatus(404));
 });
 
+router.post('/:id', (req, res) => {
+  const longURL = req.body.longURL;
+  const urlID = req.params.id;
+
+  database.modifyURL(urlID, longURL)
+  .then((urls) => {
+    if (!urls[urlID]) {
+      return Promise.reject();
+    }
+
+    const templateVars = { url: { short: urlID, long: urls[urlID] } };
+    res.render('urls_show', templateVars);
+  }).catch(() => res.sendStatus(404));
+});
+
 router.post('/:id/delete', (req, res) => {
   const urlID = req.params.id;
 

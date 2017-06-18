@@ -18,5 +18,11 @@
     <%= url.short %>
     </li>
   </ul>
+
+  <% const action = `/urls/${url.short}` %>
+  <form method="POST" action="<%= action %>">
+    <input id="longURL" type="text" name="longURL" placeholder="<%= url.long %>" style="width: 300px">
+    <input type="submit" value="Update">
+    </form>
 </body>
 </html>

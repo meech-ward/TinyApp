@@ -22,3 +22,9 @@ function deleteURL(shortURL) {
   return Promise.resolve('good');
 }
 exports.deleteURL = deleteURL;
+
+function modifyURL(urlID, longURL) {
+  urlDatabase[urlID] = longURL;
+  return allURLs();
+}
+exports.modifyURL = modifyURL;
