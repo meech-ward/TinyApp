@@ -1,11 +1,16 @@
+/* eslint no-console:0 */
 const express = require('express');
 
 const router = express.Router();
+
 
 const urlDatabase = {
   b2xVn2: 'http://www.lighthouselabs.ca',
   '9sm5xK': 'http://www.google.com',
 };
+function randomString() {
+  return `short${Object.keys(urlDatabase).length}`;
+}
 
 const urlDatabaseViewModel = [];
 for (const key in urlDatabase) {
@@ -28,8 +33,14 @@ router.get('/new', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-  console.log(req.body);  // debug statement to see POST parameters
-  res.send('Ok');         // Respond with 'Ok' (we will replace this)
+  const longURL = req.body;  // debug statement to see POST parameters
+  const shortURL = randomString();
+  urlDatabase[shortURL] = longURL;
+
+  // Redirect to /urls
+  res.statusCode = 302;
+  res.setHeader('Location', '/urls');
+  res.end();
 });
 
 router.get('/:id', (req, res) => {
