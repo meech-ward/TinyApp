@@ -23,8 +23,15 @@ router.get('/', (req, res) => {
 });
 
 router.get('/:id', (req, res) => {
-  const templateVars = { shortURL: req.params.id };
-  res.render('urls_index', templateVars);
+  const urlID = req.params.id;
+
+  if (!urlDatabase[urlID]) {
+    res.sendStatus(404);
+    return;
+  }
+
+  const templateVars = { url: { short: urlID, long: urlDatabase[urlID] } };
+  res.render('urls_show', templateVars);
 });
 
 module.exports = router;
