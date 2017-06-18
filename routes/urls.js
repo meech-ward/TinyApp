@@ -9,20 +9,15 @@ function randomString() {
   return database.allURLs().then(urls => `short${Object.keys(urls).length}`);
 }
 
-function urlDatabaseViewModel() {
-  const viewModel = [];
-  return database.allURLs().then((urls) => {
-    for (const key in urls) {
-      const output = `${key}: ${urls[key]}`;
-      viewModel.push(output);
-    }
-    return viewModel;
-  });
+function redirectToURLs(res) {
+  res.statusCode = 302;
+  res.setHeader('Location', '/urls');
+  res.end();
 }
 
 
 router.get('/', (req, res) => {
-  urlDatabaseViewModel().then((urls) => {
+  database.allURLs().then((urls) => {
     const templateVars = { urls };
     res.render('urls_index', templateVars);
   });
@@ -44,9 +39,7 @@ router.post('/', (req, res) => {
   .then(shortURL => database.addURL(longURL, shortURL))
   .then(() => {
     // Redirect to /urls
-    res.statusCode = 302;
-    res.setHeader('Location', '/urls');
-    res.end();
+    redirectToURLs(res);
   });
 });
 
@@ -60,6 +53,15 @@ router.get('/:id', (req, res) => {
 
     const templateVars = { url: { short: urlID, long: urls[urlID] } };
     res.render('urls_show', templateVars);
+  }).catch(() => res.sendStatus(404));
+});
+
+router.post('/:id/delete', (req, res) => {
+  const urlID = req.params.id;
+
+  database.deleteURL(urlID).then(() => {
+    // Deleted
+    redirectToURLs(res);
   }).catch(() => res.sendStatus(404));
 });
 

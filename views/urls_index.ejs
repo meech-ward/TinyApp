@@ -10,9 +10,10 @@
   <% include partials/_header %>
   <ul>
     <%= JSON.stringify(urls) %>
-    <% urls.forEach((url, index) => { %>
-      <li><%= url %></li>
-    <% }) %>
+    <% for (var key in urls) { %>
+      <% const deleteAction = `/urls/${key}/delete` %>
+      <li><%= `${key}: ${urls[key]}` %><form method="POST" action="<%= deleteAction %>"><input type="submit" value="Delete"></form></li>
+    <% } %>
   </ul>
 </body>
 </html>

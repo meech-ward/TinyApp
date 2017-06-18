@@ -12,8 +12,13 @@ function allURLs() {
 exports.allURLs = allURLs;
 
 function addURL(longURL, shortURL) {
-  console.log(`Long: ${JSON.stringify(longURL)}`);
   urlDatabase[shortURL] = longURL;
   return Promise.resolve('good');
 }
 exports.addURL = addURL;
+
+function deleteURL(shortURL) {
+  delete urlDatabase[shortURL];
+  return Promise.resolve('good');
+}
+exports.deleteURL = deleteURL;
