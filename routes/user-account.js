@@ -13,4 +13,10 @@ router.post('/login', (req, res) => {
   redirect.redirectToURLs(res);
 });
 
+router.post('/logout', (req, res) => {
+  res.clearCookie('username');
+
+  redirect.redirectToURLs(res);
+});
+
 module.exports = router;
