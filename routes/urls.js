@@ -27,6 +27,11 @@ router.get('/new', (req, res) => {
   res.render('urls_new');
 });
 
+router.post('/', (req, res) => {
+  console.log(req.body);  // debug statement to see POST parameters
+  res.send('Ok');         // Respond with 'Ok' (we will replace this)
+});
+
 router.get('/:id', (req, res) => {
   const urlID = req.params.id;
 
