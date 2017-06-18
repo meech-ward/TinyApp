@@ -1,10 +1,11 @@
 /* eslint no-console:0 */
 const express = require('express');
+const bodyParser = require('body-parser');
 
 const urlsRoute = require('./routes/urls');
 
 const app = express();
-
+app.use(bodyParser.urlencoded({ extended: true }));
 app.set('view engine', 'ejs');
 
 app.get('/', (req, res) => {

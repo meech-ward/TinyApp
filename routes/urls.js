@@ -13,13 +13,18 @@ for (const key in urlDatabase) {
   urlDatabaseViewModel.push(output);
 }
 
-router.get('/json', (req, res) => {
-  res.json(urlDatabase);
-});
 
 router.get('/', (req, res) => {
   const templateVars = { urls: urlDatabaseViewModel };
   res.render('urls_index', templateVars);
+});
+
+router.get('/json', (req, res) => {
+  res.json(urlDatabase);
+});
+
+router.get('/new', (req, res) => {
+  res.render('urls_new');
 });
 
 router.get('/:id', (req, res) => {
