@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Tiny App</title>
+</head>
+<body>
+  <ul>
+    <%= JSON.stringify(urls) %>
+    <% urls.forEach((url, index) => { %>
+      <li><%= url %></li>
+    <% }) %>
+  </ul>
+</body>
+</html>

@@ -7,12 +7,18 @@ const urlDatabase = {
   '9sm5xK': 'http://www.google.com',
 };
 
+const urlDatabaseViewModel = [];
+for (const key in urlDatabase) {
+  const output = `${key}: ${urlDatabase[key]}`;
+  urlDatabaseViewModel.push(output);
+}
+
 router.get('/json', (req, res) => {
   res.json(urlDatabase);
 });
 
 router.get('/', (req, res) => {
-  const templateVars = { urls: urlDatabase };
+  const templateVars = { urls: urlDatabaseViewModel };
   res.render('urls_index', templateVars);
 });
 
