@@ -19,7 +19,6 @@ router.post('/login', (req, res) => {
       return Promise.reject(403);
     }
 
-    res.cookie('user_id', user.id);
     res.cookie('userId', user.id);
 
     redirect.redirectToURLs(res);
