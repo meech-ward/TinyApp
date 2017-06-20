@@ -11,14 +11,25 @@ function randomString() {
 }
 
 function defaultTemplateVars(req) {
-  return { username: req.cookies.username };
+  return { user: { id: req.cookies.userId, username: 'username' } };
 }
 
 router.get('/', (req, res) => {
   database.allURLs().then((urls) => {
     const templateVars = defaultTemplateVars(req);
     templateVars.urls = urls;
-    res.render('urls_index', templateVars);
+
+    const userID = req.cookies.userId;
+
+    database.getUser(userID)
+    .then((user) => {
+      templateVars.user = user;
+      return templateVars;
+    })
+    .then((vars) => {
+      res.render('urls_index', vars);
+    })
+    .catch(() => res.sendStatus(404));
   });
 });
 

@@ -63,17 +63,37 @@ function saveUser(email, password, _userID) {
 
   userDatabase[userID] = user;
 
-  console.log(`UserDatabase: ${JSON.stringify(userDatabase)}`);
-
   delete user.password;
   return Promise.resolve(user);
 }
 exports.saveUser = saveUser;
 
-function getUser(userID) {
+function getUserWithID(userID) {
   const user = userDatabase[userID];
+
+  if (user) {
+    delete user.password;
+  }
+  return Promise.resolve(user);
+}
+exports.getUser = getUserWithID;
+
+function getUserWithEmail(email) {
+  let user = null;
+
+  for (const key in userDatabase) {
+    const currentUser = userDatabase[key];
+    if (currentUser.email === email) {
+      user = currentUser;
+      break;
+    }
+  }
+
+  if (!user) {
+    return Promise.reject();
+  }
 
   delete user.password;
   return Promise.resolve(user);
 }
-exports.getUser = getUser;
+exports.getUserWithEmail = getUserWithEmail;

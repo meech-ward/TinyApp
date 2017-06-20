@@ -7,15 +7,19 @@ const router = express.Router();
 
 
 router.post('/login', (req, res) => {
-  const username = req.body.username;
+  const email = req.body.email;
+  database.getUserWithEmail(email)
+  .then((user) => {
+    res.cookie('user_id', user.id);
+    res.cookie('userId', user.id);
 
-  res.cookie('username', username);
-
-  redirect.redirectToURLs(res);
+    redirect.redirectToURLs(res);
+  })
+  .catch(() => res.sendStatus(404));
 });
 
 router.post('/logout', (req, res) => {
-  res.clearCookie('username');
+  res.clearCookie('userId');
 
   redirect.redirectToURLs(res);
 });
@@ -34,7 +38,7 @@ router.post('/register', (req, res) => {
 
   database.saveUser(email, password)
   .then((user) => {
-    res.cookie('user_id', user.id);
+    res.cookie('userId', user.id);
     redirect.redirectToURLs(res);
   })
   .catch(() => res.sendStatus(400));
