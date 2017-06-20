@@ -1,10 +1,7 @@
 <p>Tiny App</p>
 
 <% if (!user) { %>
-<form method="POST" action="login">
-  <input id="email" type="email" name="email" placeholder="email" style="width: 300px">
-  <input type="submit" value="Login">
-</form>
+<p>Register</p><p>Login</p>
 <% } else { %>
 <p>Username: <%= user.username %></p>
 

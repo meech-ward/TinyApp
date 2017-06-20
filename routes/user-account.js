@@ -5,9 +5,14 @@ const database = require('../database');
 
 const router = express.Router();
 
+router.get('/login', (req, res) => {
+  res.render('user_login');
+});
 
 router.post('/login', (req, res) => {
   const email = req.body.email;
+  const password = req.body.password;
+
   database.getUserWithEmail(email)
   .then((user) => {
     res.cookie('user_id', user.id);
