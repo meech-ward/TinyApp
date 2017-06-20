@@ -15,12 +15,16 @@ router.post('/login', (req, res) => {
 
   database.getUserWithEmail(email)
   .then((user) => {
+    if (user.password !== password) {
+      return Promise.reject(403);
+    }
+
     res.cookie('user_id', user.id);
     res.cookie('userId', user.id);
 
     redirect.redirectToURLs(res);
   })
-  .catch(() => res.sendStatus(404));
+  .catch(() => res.sendStatus(403));
 });
 
 router.post('/logout', (req, res) => {

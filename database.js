@@ -93,7 +93,7 @@ function getUserWithEmail(email) {
     return Promise.reject();
   }
 
-  delete user.password;
+  // delete user.password;
   return Promise.resolve(user);
 }
 exports.getUserWithEmail = getUserWithEmail;
